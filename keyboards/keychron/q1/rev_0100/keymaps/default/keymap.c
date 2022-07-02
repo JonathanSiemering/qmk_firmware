@@ -40,6 +40,9 @@ enum custom_keycodes {
 #define KC_MCTL KC_MISSION_CONTROL
 #define KC_LPAD KC_LAUNCHPAD
 
+bool is_lsft_pressed = false;
+bool is_rsft_pressed = false;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_ansi_82(
         KC_ESC,             KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_DEL,   KC_INS,
@@ -98,13 +101,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 host_consumer_send(0);
             }
             return false;  // Skip all further processing of this key
+        case KC_LSFT:      // Keep shift state in local variable
+            if (record->event.pressed) {
+                is_lsft_pressed = true;
+            } else {
+                is_lsft_pressed = false;
+            }
+            return true;
+        case KC_RSFT:
+            if (record->event.pressed) {
+                is_rsft_pressed = true;
+            } else {
+                is_rsft_pressed = false;
+            }
+            return true;
         case KC_UE:
             if (record->event.pressed) {
-                uint16_t lsft = keyboard_report->mods & MOD_BIT(KC_LSFT);
-                uint16_t rsft = keyboard_report->mods & MOD_BIT(KC_RSFT);
                 bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
 
-                if (lsft | rsft) {
+                if (is_lsft_pressed | is_rsft_pressed) {
                     if (unicode_mode_win) {
                         send_alt_code(0, 2, 2, 0);
                     } else {
@@ -121,11 +136,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case KC_OE:
             if (record->event.pressed) {
-                uint16_t lsft = keyboard_report->mods & MOD_BIT(KC_LSFT);
-                uint16_t rsft = keyboard_report->mods & MOD_BIT(KC_RSFT);
                 bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
 
-                if (lsft | rsft) {
+                if (is_lsft_pressed | is_rsft_pressed) {
                     if (unicode_mode_win) {
                         send_alt_code(0, 2, 1, 4);
                     } else {
@@ -142,11 +155,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case KC_AE:
             if (record->event.pressed) {
-                uint16_t lsft = keyboard_report->mods & MOD_BIT(KC_LSFT);
-                uint16_t rsft = keyboard_report->mods & MOD_BIT(KC_RSFT);
                 bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
 
-                if (lsft | rsft) {
+                if (is_lsft_pressed | is_rsft_pressed) {
                     if (unicode_mode_win) {
                         send_alt_code(0, 1, 9, 6);
                     } else {
