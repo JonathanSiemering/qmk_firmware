@@ -217,24 +217,20 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (layer_state_is(ALL_FN)) {
-        for (uint8_t i = min_led; i <= max_led; i++) {
-            rgb_matrix_set_color(i, 0, 0, 0);
-        }
-
         switch (get_unicode_input_mode()) {
             case UC_MAC:
-                rgb_matrix_set_color(16, 0, 255, 0);
+                rgb_matrix_set_color(16, RGB_WHITE);
                 break;
             case UC_LNX:
-                rgb_matrix_set_color(17, 0, 255, 0);
+                rgb_matrix_set_color(17, RGB_WHITE);
                 break;
             case UC_WIN:
-                rgb_matrix_set_color(18, 0, 255, 0);
+                rgb_matrix_set_color(18, RGB_WHITE);
                 break;
         }
 
         if (layer_state_is(ALL_CK)) {
-            rgb_matrix_set_color(62, 0, 255, 0);
+            rgb_matrix_set_color(62, RGB_WHITE);
         }
     }
 }
