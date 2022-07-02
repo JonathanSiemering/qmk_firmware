@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [ALL_FN] = LAYOUT_ansi_82(
         QK_RBT,             KC_BRID,  KC_BRIU,  KC_TASK,  KC_FLXP,  RGB_VAD,  RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  EEP_RST,  QK_BOOT,
-        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
+        KC_TRNS,  UC_M_MA,  UC_M_LN,  UC_M_WI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         RGB_TOG,  RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         KC_CAPS,  RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,            KC_TRNS,
         KC_TRNS,            KC_TRNS,  KC_TRNS, TG(ALL_CK),KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [ALL_UC] = LAYOUT_ansi_82(
         KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
-        KC_TRNS,  UC_M_MA,  UC_M_LN,  UC_M_WI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_EU,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_UE,    KC_TRNS,  KC_OE,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         KC_TRNS,  KC_AE,    KC_SZ,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,            KC_TRNS,
         KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
@@ -198,3 +198,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;  // Process all other keycodes normally
     }
 }
+
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    bool is_caps_lock = host_keyboard_led_state().caps_lock;
+
+    // On some modes min and max are not correct
+    const uint8_t min_led = 0;
+    const uint8_t max_led = 81;
+
+    if (is_caps_lock) {
+        for (uint8_t i = min_led; i <= max_led; i++) {
+            rgb_matrix_set_color(i, RGB_RED);
+        }
+
+        if (is_caps_lock) {
+            rgb_matrix_set_color(45, RGB_BLUE);
+        }
+    }
+
+    if (layer_state_is(ALL_FN)) {
+        for (uint8_t i = min_led; i <= max_led; i++) {
+            rgb_matrix_set_color(i, 0, 0, 0);
+        }
+
+        switch (get_unicode_input_mode()) {
+            case UC_MAC:
+                rgb_matrix_set_color(16, 0, 255, 0);
+                break;
+            case UC_LNX:
+                rgb_matrix_set_color(17, 0, 255, 0);
+                break;
+            case UC_WIN:
+                rgb_matrix_set_color(18, 0, 255, 0);
+                break;
+        }
+
+        if (layer_state_is(ALL_CK)) {
+            rgb_matrix_set_color(62, 0, 255, 0);
+        }
+    }
+}
+
