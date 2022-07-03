@@ -48,6 +48,9 @@
 /* Disable RGB lighting when PC is in suspend */
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 
+/* Disable unicode mode in eeprom */
+#define UNICODE_CYCLE_PERSIST false
+
 /* Allow VIA to edit lighting */
 #ifdef VIA_ENABLE
 #define VIA_QMK_RGBLIGHT_ENABLE
