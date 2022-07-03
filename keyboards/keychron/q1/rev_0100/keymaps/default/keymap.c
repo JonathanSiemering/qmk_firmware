@@ -23,6 +23,7 @@ enum layers{
     ALL_CK,  // Colemak
     ALL_FN,
     ALL_UC,  // UNICODE
+    ALL_KP,  // Keepad
 };
 
 enum custom_keycodes {
@@ -73,8 +74,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,  UC_M_MA,  UC_M_LN,  UC_M_WI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         RGB_TOG,  RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         KC_CAPS,  RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,            KC_TRNS,
-        KC_TRNS,            KC_TRNS,  KC_TRNS, TG(ALL_CK),KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
-        KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+        KC_TRNS,            KC_TRNS,  KC_TRNS, TG(ALL_CK),KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_MPLY,  KC_VOLU,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS, TG(ALL_KP),KC_MPRV,  KC_VOLD,  KC_MNXT),
 
     [ALL_UC] = LAYOUT_ansi_82(
         KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
@@ -82,7 +83,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_EU,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_UE,    KC_TRNS,  KC_OE,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
         KC_TRNS,  KC_AE,    KC_SZ,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,            KC_TRNS,
         KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
-        KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS)
+        KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+
+    [ALL_KP] = LAYOUT_ansi_82(
+        KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_NUM,   KC_PAST,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_KP_1,  KC_KP_2,  KC_KP_3,  KC_PSLS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_KP_4,  KC_KP_5,  KC_KP_6,  KC_PPLS,  KC_TRNS,            KC_PENT,            KC_TRNS,
+        KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_KP_7,  KC_KP_8,  KC_KP_9,  KC_PMNS,            KC_TRNS,  KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_KP_0,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS)
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -200,22 +209,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    bool is_caps_lock = host_keyboard_led_state().caps_lock;
 
     // On some modes min and max are not correct
     const uint8_t min_led = 0;
     const uint8_t max_led = 81;
 
-    if (is_caps_lock) {
+    // Caps lock
+    if (host_keyboard_led_state().caps_lock) {
         for (uint8_t i = min_led; i <= max_led; i++) {
             rgb_matrix_set_color(i, RGB_RED);
         }
 
-        if (is_caps_lock) {
-            rgb_matrix_set_color(45, RGB_BLUE);
-        }
+        rgb_matrix_set_color(45, RGB_BLUE);
     }
 
+    // FN Layer
     if (layer_state_is(ALL_FN)) {
         switch (get_unicode_input_mode()) {
             case UC_MAC:
@@ -232,6 +240,43 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         if (layer_state_is(ALL_CK)) {
             rgb_matrix_set_color(62, RGB_WHITE);
         }
+    }
+
+    // Keepad layer
+    if (layer_state_is(ALL_KP)) {
+        // Num lock off
+        if (!host_keyboard_led_state().num_lock) {
+            for (uint8_t i = min_led; i <= max_led; i++) {
+                rgb_matrix_set_color(i, RGB_RED);
+            }
+
+            rgb_matrix_set_color(24, RGB_BLUE);
+            return;
+        }
+
+        for (uint8_t i = min_led; i <= max_led; i++) {
+            rgb_matrix_set_color(i, RGB_OFF);
+        }
+
+        // Numbers green
+        rgb_matrix_set_color(37, RGB_GREEN);
+        rgb_matrix_set_color(38, RGB_GREEN);
+        rgb_matrix_set_color(39, RGB_GREEN);
+        rgb_matrix_set_color(52, RGB_GREEN);
+        rgb_matrix_set_color(53, RGB_GREEN);
+        rgb_matrix_set_color(54, RGB_GREEN);
+        rgb_matrix_set_color(66, RGB_GREEN);
+        rgb_matrix_set_color(67, RGB_GREEN);
+        rgb_matrix_set_color(68, RGB_GREEN);
+
+        // Operators red
+        rgb_matrix_set_color(25, RGB_RED);
+        rgb_matrix_set_color(40, RGB_RED);
+        rgb_matrix_set_color(55, RGB_RED);
+        rgb_matrix_set_color(69, RGB_RED);
+
+        // Numlock blue
+        rgb_matrix_set_color(24, RGB_BLUE);
     }
 }
 
