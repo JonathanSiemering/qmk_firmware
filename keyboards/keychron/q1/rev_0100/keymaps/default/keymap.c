@@ -229,6 +229,12 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     // FN Layer
     if (layer_state_is(ALL_FN)) {
+        // Turn off all used
+        rgb_matrix_set_color(16, RGB_OFF);
+        rgb_matrix_set_color(17, RGB_OFF);
+        rgb_matrix_set_color(18, RGB_OFF);
+        rgb_matrix_set_color(62, RGB_OFF);
+
         switch (get_unicode_input_mode()) {
             case UC_MAC:
                 rgb_matrix_set_color(16, RGB_WHITE);
