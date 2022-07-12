@@ -116,14 +116,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 is_lsft_pressed = false;
             }
-            return true;
+
+            return !layer_state_is(ALL_UC);
         case KC_RSFT:
             if (record->event.pressed) {
                 is_rsft_pressed = true;
             } else {
                 is_rsft_pressed = false;
             }
-            return true;
+
+            return !layer_state_is(ALL_UC);
         case KC_UE:
             if (record->event.pressed) {
                 bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
