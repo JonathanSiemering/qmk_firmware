@@ -15,6 +15,7 @@ CUSTOM_MATRIX = lite
 SWAP_HANDS_ENABLE = yes
 RGB_MATRIX_ENABLE = yes
 EEPROM_DRIVER = i2c
+UNICODE_ENABLE = yes
 
 #project specific files
 SRC += matrix.c

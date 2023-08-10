@@ -20,6 +20,7 @@
 
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "alt_key.c"
 
 enum layers {
     BASE,         // default layer
@@ -31,8 +32,16 @@ enum layers {
 
 enum custom_keycodes {
     VRSN = SAFE_RANGE,
-    WIN_MGR
+    WIN_MGR,
+    KC_UE,
+    KC_OE,
+    KC_AE,
+    KC_SZ,
+    KC_EU
 };
+
+bool is_lsft_pressed = false;
+bool is_rsft_pressed = false;
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -48,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE_QUERTY] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    _______,           _______, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______,
-        _______, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    _______,           _______, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,    _______,
+        _______, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    _______,           _______, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, _______,
         _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    _______, _______, _______, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
@@ -98,6 +107,111 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_LALT);
             unregister_code(KC_LSFT);
         }
+    case KC_LSFT:
+        if (record->event.pressed) {
+            is_lsft_pressed = true;
+        } else {
+            is_lsft_pressed = false;
+        }
+
+        return !layer_state_is(SEC);
+    case KC_RSFT:
+        if (record->event.pressed) {
+            is_rsft_pressed = true;
+        } else {
+            is_rsft_pressed = false;
+        }
+
+        return !layer_state_is(SEC);
+    case KC_UE:
+        if (record->event.pressed) {
+            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+
+            if (is_lsft_pressed | is_rsft_pressed) {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 2, 2, 0);
+                } else {
+                    send_unicode_string("Ü");
+                }
+            } else {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 2, 5, 2);
+                } else {
+                    send_unicode_string("ü");
+                }
+            }
+        }
+        return false;
+    case KC_OE:
+        if (record->event.pressed) {
+            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+
+            if (is_lsft_pressed | is_rsft_pressed) {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 2, 1, 4);
+                } else {
+                    send_unicode_string("Ö");
+                }
+            } else {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 2, 4, 6);
+                } else {
+                    send_unicode_string("ö");
+                }
+            }
+        }
+        return false;
+    case KC_AE:
+        if (record->event.pressed) {
+            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+
+            if (is_lsft_pressed | is_rsft_pressed) {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 1, 9, 6);
+                } else {
+                    send_unicode_string("Ä");
+                }
+            } else {
+                if (unicode_mode_win) {
+                    send_alt_code(0, 2, 2, 8);
+                } else {
+                    send_unicode_string("ä");
+                }
+            }
+        }
+        return false;
+    case KC_SZ:
+        if (record->event.pressed) {
+            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+
+            if (unicode_mode_win) {
+                send_alt_code(0, 2, 2, 3);
+            } else {
+                send_unicode_string("ß");
+            }
+        }
+        return false;
+    case KC_EU:
+        if (record->event.pressed) {
+            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+
+            if (unicode_mode_win) {
+                send_alt_code(0, 1, 2, 8);
+            } else {
+                send_unicode_string("€");
+            }
+        }
+        return false;
     }
     return true;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    bool win_layer = !layer_state_is(BASE_MAC);
+    if (win_layer && get_unicode_input_mode() != UC_WIN) {
+        set_unicode_input_mode((uint8_t)UC_WIN);
+    } else if (!win_layer && get_unicode_input_mode() != UC_MAC) {
+        set_unicode_input_mode((uint8_t)UC_MAC);
+    }
+    return state;
 }
