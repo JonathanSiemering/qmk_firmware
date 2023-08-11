@@ -38,7 +38,10 @@ enum custom_keycodes {
     KC_OE,
     KC_AE,
     KC_SZ,
-    KC_EU
+    KC_EU,
+    KC_MAC,
+    KC_LNX,
+    KC_WIN,
 };
 
 bool is_lsft_pressed = false;
@@ -92,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [SETTING] = LAYOUT_moonlander(
-       LED_LEVEL, UC_MAC, UC_LINX, UC_WIN,  _______, _______, _______,           _______, _______, _______, _______, _______, _______, QK_BOOT,
+       LED_LEVEL, KC_MAC,  KC_LNX,  KC_WIN,  _______, _______, _______,           _______, _______, _______, _______, _______, _______, QK_BOOT,
         KC_CAPS, _______, _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, TG(BASE_MAC),
@@ -100,6 +103,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             RGB_HUD, RGB_VAD, RGB_HUI, TOGGLE_LAYER_COLOR, _______, _______
     ),
 };
+
+void keyboard_post_init_user(void) {
+    if (get_unicode_input_mode() == UNICODE_MODE_MACOS) {
+        layer_on(BASE_MAC);
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -211,6 +220,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 send_unicode_string("€");
             }
         }
+        return false;
+    case KC_MAC:
+        set_unicode_input_mode(UNICODE_MODE_MACOS);
+        layer_on(BASE_MAC);
+        return false;
+    case KC_LNX:
+        set_unicode_input_mode(UNICODE_MODE_LINUX);
+        layer_off(BASE_MAC);
+        return false;
+    case KC_WIN:
+        set_unicode_input_mode(UNICODE_MODE_WINDOWS);
+        layer_off(BASE_MAC);
         return false;
     }
     return true;
