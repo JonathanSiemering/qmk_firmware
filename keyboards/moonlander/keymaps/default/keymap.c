@@ -28,6 +28,7 @@ enum layers {
     BASE_MAC,     // mac
     SEC,          // symbols and media
     MOUSE,        // mouse control
+    SETTING,      // Settings
 };
 
 enum custom_keycodes {
@@ -46,7 +47,7 @@ bool is_rsft_pressed = false;
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_moonlander(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_CAPS,          KC_PGUP, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RBRC,
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    MO(SETTING),     KC_PGUP, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RBRC,
         KC_BSLS, KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_DEL,           KC_PGDN, KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_LBRC,
         KC_TAB,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_EQL,           KC_MINS, KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
@@ -77,17 +78,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, _______,           _______, KC_UP,   KC_7,    KC_8,    KC_9,    KC_ASTR, KC_F12,
         _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,  _______,           _______, KC_DOWN, KC_4,    KC_5,    KC_6,    KC_PLUS, _______,
         _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                             KC_AMPR, KC_1,    KC_2,    KC_3,    KC_BSLS, _______,
-        EE_CLR,  _______, _______, KC_WBAK, KC_WFWD,          RGB_VAI,           RGB_TOG,          _______, KC_DOT,  KC_0,    KC_EQL,  _______,
-                                            RGB_HUD, RGB_VAD, RGB_HUI, TOGGLE_LAYER_COLOR,_______, _______
+        EE_CLR,  _______, _______, KC_WBAK, KC_WFWD,          _______,           _______,          _______, KC_DOT,  KC_0,    KC_EQL,  _______,
+                                            _______, _______, _______,           _______, _______, _______
     ),
 
     [MOUSE] = LAYOUT_moonlander(
-        LED_LEVEL,_______,_______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, QK_BOOT,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         KC_MUTE, _______, _______, KC_MS_U, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         KC_VOLU, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        KC_VOLD, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, TG(BASE_MAC),
-        KC_MPRV, KC_MNXT, KC_MPLY, KC_BTN1, KC_BTN2,         _______,            _______,          _______, _______, _______, _______, TG(BASE_QUERTY),
+        KC_VOLD, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        KC_MPRV, KC_MNXT, KC_MPLY, KC_BTN1, KC_BTN2,         _______,            _______,          _______, _______, _______, _______, _______,
                                             KC_BTN1, KC_BTN2, _______,           _______, _______, _______
+    ),
+
+    [SETTING] = LAYOUT_moonlander(
+       LED_LEVEL, UC_MAC, UC_LINX, UC_WIN,  _______, _______, _______,           _______, _______, _______, _______, _______, _______, QK_BOOT,
+        KC_CAPS, _______, _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, TG(BASE_MAC),
+        _______, _______, _______, _______, _______,          RGB_VAI,           RGB_TOG,          _______, _______, _______, _______, TG(BASE_QUERTY),
+                                            RGB_HUD, RGB_VAD, RGB_HUI, TOGGLE_LAYER_COLOR, _______, _______
     ),
 };
 
@@ -125,7 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return !layer_state_is(SEC);
     case KC_UE:
         if (record->event.pressed) {
-            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+            bool unicode_mode_win = get_unicode_input_mode() == UNICODE_MODE_WINDOWS;
 
             if (is_lsft_pressed | is_rsft_pressed) {
                 if (unicode_mode_win) {
@@ -144,7 +154,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case KC_OE:
         if (record->event.pressed) {
-            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+            bool unicode_mode_win = get_unicode_input_mode() == UNICODE_MODE_WINDOWS;
 
             if (is_lsft_pressed | is_rsft_pressed) {
                 if (unicode_mode_win) {
@@ -163,7 +173,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case KC_AE:
         if (record->event.pressed) {
-            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+            bool unicode_mode_win = get_unicode_input_mode() == UNICODE_MODE_WINDOWS;
 
             if (is_lsft_pressed | is_rsft_pressed) {
                 if (unicode_mode_win) {
@@ -182,7 +192,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case KC_SZ:
         if (record->event.pressed) {
-            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+            bool unicode_mode_win = get_unicode_input_mode() == UNICODE_MODE_WINDOWS;
 
             if (unicode_mode_win) {
                 send_alt_code(0, 2, 2, 3);
@@ -193,7 +203,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     case KC_EU:
         if (record->event.pressed) {
-            bool unicode_mode_win = get_unicode_input_mode() == UC_WIN;
+            bool unicode_mode_win = get_unicode_input_mode() == UNICODE_MODE_WINDOWS;
 
             if (unicode_mode_win) {
                 send_alt_code(0, 1, 2, 8);
@@ -206,12 +216,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    bool win_layer = !layer_state_is(BASE_MAC);
-    if (win_layer && get_unicode_input_mode() != UC_WIN) {
-        set_unicode_input_mode((uint8_t)UC_WIN);
-    } else if (!win_layer && get_unicode_input_mode() != UC_MAC) {
-        set_unicode_input_mode((uint8_t)UC_MAC);
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // Caps lock
+    if (host_keyboard_led_state().caps_lock) {
+        for (uint8_t i = led_min; i <= led_max; i++) {
+            rgb_matrix_set_color(i, RGB_RED);
+        }
     }
-    return state;
+
+    // Set Layer
+    if (layer_state_is(SETTING)) {
+        // Set all off
+        for (uint8_t i = led_min; i <= led_max; i++) {
+            rgb_matrix_set_color(i, RGB_OFF);
+        }
+
+        // MAC Layer
+        if (layer_state_is(BASE_MAC)) {
+            rgb_matrix_set_color(39, RGB_WHITE);
+        }
+
+        // QUERTY Layer
+        if (layer_state_is(BASE_QUERTY)) {
+            rgb_matrix_set_color(40, RGB_WHITE);
+        }
+
+        // Unicode Mode
+        switch (get_unicode_input_mode()) {
+            case UNICODE_MODE_MACOS:
+                rgb_matrix_set_color(5, RGB_WHITE);
+                break;
+            case UNICODE_MODE_LINUX:
+                rgb_matrix_set_color(10, RGB_WHITE);
+                break;
+            case UNICODE_MODE_WINDOWS:
+                rgb_matrix_set_color(15, RGB_WHITE);
+                break;
+        }
+    }
+
+    return false;
 }
+

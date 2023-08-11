@@ -126,36 +126,36 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
     bool LED_6 = false;
 #endif
 
-    uint8_t layer = get_highest_layer(state);
-    switch (layer) {
-        case 1:
-            LED_1 = true;
-            LED_4 = true;
-            break;
-        case 2:
-            LED_2 = true;
-            LED_5 = true;
-            break;
-        case 3:
-            LED_3 = true;
-#if !defined(CAPS_LOCK_STATUS)
-            LED_6 = true;
-#endif
-            break;
-        case 4:
-            LED_4 = true;
-            break;
-        case 5:
-            LED_5 = true;
-            break;
-        case 6:
-#if !defined(CAPS_LOCK_STATUS)
-            LED_6 = true;
-#endif
-            break;
-        default:
-            break;
-    }
+    /* uint8_t layer = get_highest_layer(state); */
+    /* switch (layer) { */
+    /*     case 1: */
+    /*         LED_1 = true; */
+    /*         LED_4 = true; */
+    /*         break; */
+    /*     case 2: */
+    /*         LED_2 = true; */
+    /*         LED_5 = true; */
+    /*         break; */
+    /*     case 3: */
+    /*         LED_3 = true; */
+/* #if !defined(CAPS_LOCK_STATUS) */
+    /*         LED_6 = true; */
+/* #endif */
+    /*         break; */
+    /*     case 4: */
+    /*         LED_4 = true; */
+    /*         break; */
+    /*     case 5: */
+    /*         LED_5 = true; */
+    /*         break; */
+    /*     case 6: */
+/* #if !defined(CAPS_LOCK_STATUS) */
+    /*         LED_6 = true; */
+/* #endif */
+    /*         break; */
+    /*     default: */
+    /*         break; */
+    /* } */
 
     ML_LED_1(LED_1);
     ML_LED_2(LED_2);
