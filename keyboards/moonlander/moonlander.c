@@ -117,31 +117,6 @@ void keyboard_pre_init_kb(void) {
 layer_state_t layer_state_set_kb(layer_state_t state) {
     state = layer_state_set_user(state);
     if (is_launching || !keyboard_config.led_level) return state;
-
-    if (layer_state_is(3)) {
-        ML_LED_1(true);
-        ML_LED_4(true);
-    } else {
-        ML_LED_1(false);
-        ML_LED_4(false);
-    }
-
-    if (layer_state_is(4)) {
-        ML_LED_2(true);
-        ML_LED_5(true);
-    } else {
-        ML_LED_2(false);
-        ML_LED_5(false);
-    }
-
-    if (layer_state_is(5)) {
-        ML_LED_3(true);
-        ML_LED_6(true);
-    } else {
-        ML_LED_3(false);
-        ML_LED_6(false);
-    }
-
     return state;
 }
 #endif
