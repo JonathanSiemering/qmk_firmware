@@ -210,9 +210,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-void keyboard_post_init_user(void) {
-    layer_on(ALL_CK);
-}
+// void keyboard_post_init_user(void) {
+//     layer_on(ALL_CK);
+// }
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
