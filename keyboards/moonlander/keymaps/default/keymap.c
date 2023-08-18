@@ -247,22 +247,25 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     // Set Layer
     if (layer_state_is(SETTING)) {
-        // Set all off
-        for (uint8_t i = led_min; i <= led_max; i++) {
-            rgb_matrix_set_color(i, RGB_OFF);
-        }
-
         // MAC Layer
         if (layer_state_is(BASE_MAC)) {
             rgb_matrix_set_color(39, RGB_WHITE);
+        } else {
+            rgb_matrix_set_color(39, RGB_OFF);
         }
 
         // QUERTY Layer
         if (layer_state_is(BASE_QUERTY)) {
             rgb_matrix_set_color(40, RGB_WHITE);
+        } else {
+            rgb_matrix_set_color(40, RGB_OFF);
         }
 
         // Unicode Mode
+        rgb_matrix_set_color(5, RGB_OFF);
+        rgb_matrix_set_color(10, RGB_OFF);
+        rgb_matrix_set_color(15, RGB_OFF);
+
         switch (get_unicode_input_mode()) {
             case UNICODE_MODE_MACOS:
                 rgb_matrix_set_color(5, RGB_WHITE);
